@@ -206,24 +206,26 @@ class core
 			'avatar_height' => $user_data['user_avatar_height'],
 		];
 
-		$driver = $this->avatar_manager->get_driver($user_data['user_avatar_type']);
+		$type = $user_data['user_avatar_type'];
+		
+		$driver = $this->avatar_manager->get_driver($type);
 
 		if (!$driver)
 		{
 			return false;
 		}
-
+		
 		$avatar_data = $driver->get_data($row);
 
-		if ($user_data['user_avatar_type'] === 'avatar.driver.gravatar')
+		if ($type === 'avatar.driver.gravatar')
 		{
 			$avatar_data['src'] = $this->get_gravatar_url($row);
 		}
-		else if ($user_data['user_avatar_type'] === 'avatar.driver.upload')
+		else if ($type === 'avatar.driver.upload' || $type === AVATAR_UPLOAD)
 		{
 			$avatar_data['src'] = $this->get_upload_avatar_url($user_data['user_avatar']);
 		}
-		else if ($user_data['user_avatar_type'] === 'avatar.driver.local')
+		else if ($type === 'avatar.driver.local' || $type === AVATAR_GALLERY)
 		{
 			$avatar_data['src'] = $this->get_local_avatar_url($user_data['user_avatar']);
 		}
